@@ -1,4 +1,4 @@
-#!/usr/bin/perl 
+#!/usr/bin/perl
 
 package Message ;
 
@@ -13,9 +13,9 @@ our @EXPORT_OK = qw(get_dbh get_count_by_email get_by_email);
 
 
 sub get_dbh {
-	my $dsn = "DBI:mysql:dilhis_alintur";
+	my $dsn = "DBI:mysql:dilhis";
 my $username = "dilhis";
-my $password = 'z9Yd38AwFy';
+my $password = '12345';
 my $dbh  = DBI->connect($dsn,$username,$password) or
 die("Ошибка подключения к базе данных: $DBI::errstr\n");
 
@@ -30,13 +30,13 @@ sub get_count_by_email {
 	)
 	AS `a` ORDER BY `int_id`, `created`")
         or die $DBI::errstr;
-		
+
 	return $count;
 };
 
 sub get_by_email {
 	my ($dbh, $email) = @_;
-	
+
 
 	$sth = $dbh->prepare("SELECT `created`, `str` FROM
 	(SELECT `created`, `int_id`, `str` FROM `log` WHERE `address` = '$email'
@@ -47,7 +47,7 @@ sub get_by_email {
 	my @ret;
 		while ( my $row = $sth->fetchrow_hashref ) {
 			push @ret, $row;
-			
+
 		}
 	return @ret;
 };
