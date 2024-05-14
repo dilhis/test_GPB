@@ -1,0 +1,38 @@
+CREATE TABLE message (
+created TIMESTAMP(0) NOT NULL,
+id VARCHAR(256) NOT NULL,
+int_id CHAR(16) NOT NULL,
+str VARCHAR(800) NOT NULL,
+status BOOLEAN,
+CONSTRAINT message_id_pk PRIMARY KEY(id)
+);
+
+CREATE INDEX message_created_idx ON message (created);
+CREATE INDEX message_int_id_idx ON message (int_id);
+
+
+CREATE TABLE log (
+created TIMESTAMP(0) NOT NULL,
+int_id CHAR(16) NOT NULL,
+str VARCHAR(800),
+address VARCHAR(256)
+);
+
+CREATE INDEX log_address_idx USING hash ON log(address);
+
+
+SELECT count(*) FROM
+	(SELECT `created`, `int_id`, `str` FROM `log` WHERE `address` = 'tpxmuwr@somehost.ru'
+	UNION SELECT `created`, `int_id`, `str` FROM `message` WHERE `str` LIKE '%str%'
+	)
+AS `a` ORDER BY `int_id`, `created` 
+		
+		
+		
+SELECT `str` FROM
+	(SELECT `created`, `int_id`, `str` FROM `log` WHERE `address` = 'tpxmuwr@somehost.ru'
+	UNION SELECT `created`, `int_id`, `str` FROM `message` WHERE `str` LIKE '%str%'
+	)
+AS `a` ORDER BY `int_id`, `created` LIMIT 100
+
+
